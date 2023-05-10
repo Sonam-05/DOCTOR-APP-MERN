@@ -1,0 +1,117 @@
+.Layout{
+
+}
+
+.main{
+    padding: 10px;
+    height: 100vh;
+    display: flex;
+}
+
+.sidebar{
+    background-color: brown;
+    /* width: 30%; */
+    /* height: 100%; */
+    position: fixed;
+    left: 10px;
+    top: 10px;
+    bottom: 10px;
+    min-width: 240px;
+    margin-right: 6px;
+}
+
+.logo{
+    text-align: center;
+    margin: 20px;
+    color: aliceblue;
+}
+
+hr{
+    height: 1.5px;
+    box-shadow: 1px 1px 2px rgb(93, 18, 18);
+}
+
+/* .menu{
+
+} */
+
+.main-content{
+    width: 100%;
+    margin-left: 250px;
+}
+
+.main-content-header{
+    border: 1px solid black;
+    padding: 10px;
+}
+
+.headerSection{
+    /* background-color: antiquewhite; */
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.badgeIcon{
+  font-size: 6px;  
+}
+
+.headerSection i{
+    font-size: 22px;
+}
+
+.headerSection a{
+    text-decoration: none;
+    font-size: 22px;
+    margin : 0px 22px 0px 25px;
+    text-transform: capitalize;
+    letter-spacing: 0.8px;
+}
+
+.main-content-content{
+    margin-top: 10px;
+    border: 1px solid black;
+    padding: 10px;
+    min-height: 90%;
+}
+
+.menu{   
+    padding: 10px 0px;
+}
+
+.sidebarmenuSection{
+    /* background-color: antiquewhite; */
+    margin: 26px 0px;
+    padding: 6px;
+    font-size: 1.4rem;
+}
+
+.sidebarmenuSection i{
+    color: aliceblue;
+    margin: 0px 14px;
+}
+
+.sidebarmenuSection a{
+    text-decoration: none;
+    color: rgb(167, 167, 198);
+}
+
+.sidebarmenuSection a:hover{
+    color: blue;
+}
+
+.active{
+    background-color: aliceblue;
+}
+
+.active i{
+    color: brown;
+}
+
+.active a{
+    color: brown;
+}
+
+
+
+

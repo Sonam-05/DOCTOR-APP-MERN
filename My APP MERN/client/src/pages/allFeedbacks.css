@@ -1,0 +1,12 @@
+.AllFeedBacks h2{
+    text-align: center;
+    margin: 30px;
+}
+
+.allFeedbacksContainer{
+    background-color: aliceblue;
+    margin: 30px 4rem;
+    padding: 20px;
+    border-radius: 6px;
+    box-shadow: 1px 1px 2px 2px rgb(202, 209, 216);
+}

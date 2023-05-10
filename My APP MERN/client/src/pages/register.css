@@ -1,0 +1,68 @@
+.Register{
+    /* background-color: aqua; */
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.FormCon{
+    /* background-color: antiquewhite; */
+    width: 40%;
+    box-shadow: 1px 1px 2px 2px rgb(204, 214, 223);
+    border-radius: 6px;
+}
+
+.formSection{
+    padding: 26px;
+}
+
+.buttonSection{
+    /* background-color: aquamarine; */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0px 0.6rem;
+}
+
+.btnSubmit{
+    width: 23vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.userProfile{
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 42px;
+}
+
+.profileSection{
+    display: flex;
+    /* background-color: aquamarine; */
+    justify-content: center;
+}
+
+.cardContainer{
+    background-color: aliceblue !important;
+    color: #000 !important;
+    /* background-color: blue !important; */
+    width: 40vw;
+    min-height: 180px;
+}
+
+.cardHeader{
+    /* background-color: blue; */
+    text-align: center;
+    padding: 12px;
+}
+
+.cardCon{
+    /* background-color: aqua; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}

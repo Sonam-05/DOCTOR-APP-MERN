@@ -1,0 +1,187 @@
+const userModel = require("../models/userModel");
+const colors = require('colors');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const doctorModel = require("../models/doctorModel");
+const moment = require('moment');
+const appointmentModel = require("../models/appointmentModel");
+
+//Register Controller
+const registerCtrl = async (req, res) => {
+    try {
+        const user = await userModel.findOne({ email: req.body.email });
+        if (user) {
+            res.status(201).send({ success: false, message: 'User already exist.' });
+        }
+        const password = req.body.password;
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+        req.body.password = hashedPassword;
+        const newUser = new userModel(req.body);
+        await newUser.save();
+        res.status(200).send({ success: true, message: 'Registered Successfully' })
+    } catch (error) {
+        console.log(`${error}`.bgRed.white);
+        res.status(500).send({ success: false, message: `Register api issue : ${error.message}` }, error)
+    }
+}
+
+//Login Controller
+const loginCtrl = async (req, res) => {
+    try {
+        const user = await userModel.findOne({ email: req.body.email });
+        if (!user) {
+            res.status(201).send({ success: false, message: 'User not found' })
+        } else {
+            const isMatch = await bcrypt.compare(req.body.password, user.password);
+            if (!isMatch) {
+                return res.status(201).send({ success: false, message: 'Invalid email or password' })
+            } else {
+                const token = jwt.sign({ id: user._id }, process.env.JWT_SECRETKEY, { expiresIn: '1d' });
+                res.status(200).send({ success: true, message: 'Login Successful', token })
+            }
+        }
+    } catch (error) {
+        console.log(`${error}`.bgRed.white);
+        res.status(500).send({ success: false, message: `Login api issue : ${error.message}` }, error)
+    }
+}
+
+//getUserData Controller
+const getUserDataCtrl = async (req, res) => {
+    try {
+        const user = await userModel.findById({ _id: req.body.userId });
+        if (!user) {
+            res.status(201).send({ success: false, message: 'User not found!' })
+        } else {
+            res.status(200).send({ success: true, data: user })
+        }
+    } catch (error) {
+        res.status(500).send({ success: false, message: `Issue in fetching user data : ${error.message}` })
+        console.log(`error`.bgRed.white)
+    }
+}
+
+//applyDoctor Controller
+const applyDoctorCtrl = async (req, res) => {
+    try {
+        const newDoctor = new doctorModel({ ...req.body, status: 'pending' });
+        await newDoctor.save();
+        const adminUser = await userModel.findOne({ isAdmin: true });
+        const notification = adminUser.notification;
+        notification.push({
+            type: 'Doctor-Request',
+            message: `${newDoctor.firstName} ${newDoctor.lastName} has applied for doctor`,
+            data: {
+                doctorId: `${newDoctor._id}`,
+                name: `${newDoctor.firstName} ${newDoctor.lastName}`,
+                clickPath: '/admin/doctor-requests'
+            }
+        })
+        await userModel.findByIdAndUpdate(adminUser._id, { notification })
+        res.status(200).send({ success: true, message: `Applied Successfully` })
+    } catch (error) {
+        console.log(`${error}`.bgRed.white);
+        res.status(500).send({ success: false, message: `applyDoctor api issue : ${error.message}` }, error)
+    }
+}
+
+//markAllRead Controller
+const markAllReadCtrl = async (req, res) => {
+    try {
+        const adminUser = await userModel.findOne({ _id: req.body.userId });
+        const seennotification = adminUser.seennotification;
+        const notification = adminUser.notification;
+        seennotification.push(...notification);
+        adminUser.notification = [];
+        const updatedAdminUser = await adminUser.save();
+        res.status(200).send({ success: true, message: 'All notificated marked as read successfully', data: updatedAdminUser })
+    } catch (error) {
+        res.status(500).send({ success: false, message: `markAllRead api Issue : ${error.message}`.bgRed.white })
+    }
+}
+
+//deleteAllRead Controller
+const deleteAllReadCtrl = async (req, res) => {
+    try {
+        const adminUser = await userModel.findOne({ _id: req.body.userId });
+        adminUser.seennotification = [];
+        const updatedUser = await adminUser.save();
+        res.status(200).send({ success: true, message: 'All read messages deleted successfully', data: updatedUser })
+    } catch (error) {
+        res.status(500).send({ success: false, message: `deleteAllReadCtrl api issue : ${error.message}`.bgRed.white })
+    }
+}
+
+//bookAppointment Controller
+const bookAppointmentCtrl = async (req, res) => {
+    try {
+        req.body.date = moment(req.body.date, "DD-MM-YYYY").toISOString();
+        req.body.time = moment(req.body.time, "HH:mm").toISOString();
+        req.body.status = "pending"
+        const newAppointment = new appointmentModel(req.body);
+        await newAppointment.save();
+        const user = await userModel.findOne({ _id: req.body.doctorInfo.userId });
+        user.notification.push({
+            type: "New-appointment-request",
+            message: `A new appointment request from ${req.body.userInfo.username}`,
+            onCLickPath: "/user/appointments",
+        })
+        await user.save()
+        res.status(200).send({
+            success: true,
+            message: "Appointment Booked succesfully",
+        })
+    }catch (error) {
+        console.log(error);
+        res.status(500).send({ success: false, message: `bookAppointment api issue : ${error.message}`.bgRed.white, error })
+    }
+}
+
+//bookingAvailability Controller
+// const bookingAvailabilityCtrl = async (req, res) => {
+//     try{
+//         const date = moment(req.body.date, "DD-MM-YYYY").toISOString();
+//     }catch (error) {
+//         console.log(error);
+//         res.status(500).send({ success: false, message: `bookingAvailability api issue : ${error.message}`.bgRed.white, error })
+//     }
+// }
+
+// userProfileData Controller
+// const userProfileDataCtrl = async (req, res) => {
+//     try{
+//         const user = await userModel.findById({_id : req.body.userId});
+//         res.status(200).send({success : true, message : 'User Data', data : user})
+//     }catch(error){
+//         console.log(error);
+//         res.status(500).send({ success: false, message: `userProfileData api issue : ${error.message}`.bgRed.white, error })
+//     }
+// }
+
+//homePageBookAppointment Controller
+// const homePageBookAppointmentCtrl = async (req, res) => {
+//     try {
+//         req.body.date = moment(req.body.date, "DD-MM-YYYY").toISOString();
+//         req.body.time = moment(req.body.time, "HH:mm").toISOString();
+//         req.body.status = "pending"
+//         const newAppointment = new appointmentModel(req.body);
+//         await newAppointment.save();
+//         const user = await userModel.findOne({ _id: req.body.doctorInfo.userId });
+//         user.notification.push({
+//             type: "New-appointment-request",
+//             message: `A new appointment request from ${req.body.userInfo.username}`,
+//             onCLickPath: "/user/appointments",
+//         })
+//         await user.save()
+//         res.status(200).send({
+//             success: true,
+//             message: "Appointment Booked succesfully",
+//         })
+//     }catch (error) {
+//         console.log(error);
+//         res.status(500).send({ success: false, message: `bookAppointment api issue : ${error.message}`.bgRed.white, error })
+//     }
+// }
+
+module.exports = { registerCtrl, loginCtrl, getUserDataCtrl, applyDoctorCtrl, markAllReadCtrl, deleteAllReadCtrl, bookAppointmentCtrl}

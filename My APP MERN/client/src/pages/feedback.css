@@ -1,0 +1,12 @@
+.Feedback h3{
+    text-align: center;
+    padding: 40px;
+}
+
+.feedBackFormContainer{
+    margin: 0px 3rem;
+}
+
+.feedBackFormContainer TextArea{
+    height: 150px;
+}

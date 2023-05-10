@@ -1,0 +1,35 @@
+.Service{
+
+}
+
+.serviceTitle{
+    text-align: center;
+}
+
+.serviceImagesContainer{
+    /* background-color: aqua; */
+    margin: 30px 4rem;
+}
+
+.serviceImagesContainer div div{
+transition: all 0.4s ease-in-out;
+}
+
+.serviceImagesContainer div div:hover{
+    /* background-color: antiquewhite; */
+    box-shadow: 10px 10px 20px #00000080;
+}
+
+.serviceImagesContainer img{
+    height: 260px;
+}
+
+.serviceContentDiv{
+    background-color: rgb(16, 16, 168);
+    color: aliceblue;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    padding: 12px;
+}
+
+

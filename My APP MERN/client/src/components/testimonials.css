@@ -1,0 +1,77 @@
+.Testimonials h3{
+    text-align: center;
+    margin: 40px;
+    letter-spacing: 2px;
+}
+
+.testimonialsSectionContainer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center; 
+    /* background-color: aqua; */
+    margin: 0px 4rem;
+}
+
+.carouselSection{
+    width: 65%;
+}
+
+
+.feedbackSection{
+    width: 30%;
+}
+
+.ImageSec{
+    background-color: gainsboro;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+    height: 100%;
+    /* line-height: 0%; */
+}
+
+.ImageSec img{
+    height: 100px;
+    width: 100px !important;
+    margin-bottom: 16px;
+    /* line-height: 0%; */
+}
+
+.ImageSec h3, .ImageSec h5, .ImageSec p{
+    /* background-color: brown; */
+    margin: 0px;
+    padding: 6px;
+    text-align: center;
+    /* line-height: 0%; */
+}
+
+
+.readAllFeedbacks{
+    display: inline-block;
+    margin-top: 10px;
+    color: blue;
+    text-decoration: none;
+    /* background-color: darkgoldenrod; */
+    font-size: 16px;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 740px) {
+    .testimonialsSectionContainer{
+        display: flex;
+        flex-direction: column;
+    }
+
+    .carouselSection{
+        width: 92%;
+        margin-bottom: 40px;
+    }
+    
+    .feedbackSection{
+        width: 92%;
+    }
+}
+
+
